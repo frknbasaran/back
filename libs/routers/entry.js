@@ -66,4 +66,42 @@ module.exports = function (app) {
    *     }
    */
   app.get("/entries/:id", routers["entry"].fetch);
+  /**
+   * @api {post} /entry/vote/up Give Up Vote For Entry
+   * @apiName UpVoteEntry
+   * @apiGroup Entry
+   * @apiVersion 0.0.1
+   *
+   * @apiParam {String} id id
+   *
+   * @apiSuccessExample {json} Success-Response:
+   *     HTTP/1.1 200
+   *     {
+   *       "success": true,
+   *       "data": {
+   *         "upvotes_count": 0...n,
+   *         "downvotes_count": 0...n
+   *       }
+   *     }
+   */
+  app.post("/entry/vote/up", secure, giffMe("body", ["id"]), routers["entry"].upVote);
+  /**
+   * @api {post} /entry/vote/down Give Down Vote For Entry
+   * @apiName DownVoteEntry
+   * @apiGroup Entry
+   * @apiVersion 0.0.1
+   *
+   * @apiParam {String} id id
+   *
+   * @apiSuccessExample {json} Success-Response:
+   *     HTTP/1.1 200
+   *     {
+   *       "success": true,
+   *       "data": {
+   *         "upvotes_count": 0...n,
+   *         "downvotes_count": 0...n
+   *       }
+   *     }
+   */
+  app.post("/entry/vote/down", secure, giffMe("body", ["id"]), routers["entry"].downVote);
 };

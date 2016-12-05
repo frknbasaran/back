@@ -111,5 +111,111 @@ module.exports = {
         }
       })
       .then(null, $error(res));
+  },
+  upVote: function (req, res) {
+    var id = req.body.id;
+
+    Entry.findOne({id: id})
+      .then(function (entry) {
+        if (entry) {
+          if (entry.user.toString() === req.user_mdl._id.toString()) {
+            res.json({
+              success: false,
+              message: "ayıptır, günahtır"
+            });
+          } else {
+            var query = {};
+            if (entry.up.indexOf(req.user_mdl._id) == -1 &&
+              entry.down.indexOf(req.user_mdl._id) == -1) {
+              query['$push'] = {
+                up: req.user_mdl._id
+              };
+            } else if (entry.up.indexOf(req.user_mdl._id) == -1 &&
+              entry.down.indexOf(req.user_mdl._id) > -1) {
+              query['$push'] = {
+                up: req.user_mdl._id
+              };
+
+              query['$pull'] = {
+                down: req.user_mdl._id
+              };
+            }
+
+            Entry.update({id: id}, query)
+              .then(function () {
+                return Entry.findOne({id: id});
+              })
+              .then(function (entry) {
+                res.json({
+                  success: true,
+                  data: {
+                    upvotes_count: entry.up.length,
+                    downvotes_count: entry.down.length
+                  }
+                });
+              })
+              .then(null, $error(res));
+          }
+        } else {
+          res.json({
+            success: false,
+            message: "böyle bir entry yok"
+          });
+        }
+      })
+      .then(null, $error(res));
+  },
+  downVote: function (req, res) {
+    var id = req.body.id;
+
+    Entry.findOne({id: id})
+      .then(function (entry) {
+        if (entry) {
+          if (entry.user.toString() === req.user_mdl._id.toString()) {
+            res.json({
+              success: false,
+              message: "ayıptır, günahtır"
+            });
+          } else {
+            var query = {};
+            if (entry.down.indexOf(req.user_mdl._id) == -1 &&
+              entry.up.indexOf(req.user_mdl._id) == -1) {
+              query['$push'] = {
+                down: req.user_mdl._id
+              };
+            } else if (entry.down.indexOf(req.user_mdl._id) == -1 &&
+              entry.up.indexOf(req.user_mdl._id) > -1) {
+              query['$push'] = {
+                down: req.user_mdl._id
+              };
+
+              query['$pull'] = {
+                up: req.user_mdl._id
+              };
+            }
+
+            Entry.update({id: id}, query)
+              .then(function () {
+                return Entry.findOne({id: id});
+              })
+              .then(function (entry) {
+                res.json({
+                  success: true,
+                  data: {
+                    upvotes_count: entry.up.length,
+                    downvotes_count: entry.down.length
+                  }
+                });
+              })
+              .then(null, $error(res));
+          }
+        } else {
+          res.json({
+            success: false,
+            message: "böyle bir entry yok"
+          });
+        }
+      })
+      .then(null, $error(res));
   }
 };
