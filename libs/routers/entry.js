@@ -11,7 +11,7 @@ module.exports = function (app) {
    *       "success": true
    *     }
    */
-  app.delete("/entries/:id", routers["entry"].remove);
+  app.delete("/entries/:id", secure, routers["entry"].remove);
   /**
    * @api {post} /entries Create Entry
    * @apiName CreateEntry
@@ -30,5 +30,5 @@ module.exports = function (app) {
    *       }
    *     }
    */
-  app.post("/entries", giffMe("body", ["topic_id", "text"]), routers["entry"].create);
+  app.post("/entries", secure, giffMe("body", ["topic_id", "text"]), routers["entry"].create);
 };

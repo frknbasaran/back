@@ -5,7 +5,8 @@ module.exports = {
   remove: function (req, res) {
     var id = req.params.id;
 
-    Entry.findOne({id: id})
+    Entry
+      .findOne({id: id, user: req.user_mdl._id})
       .then(function (entry) {
         if (entry) {
           Topic.findOneAndUpdate({entries: entry._id}, {$pull: {entries: entry._id}})
@@ -25,7 +26,7 @@ module.exports = {
         } else {
           res.json({
             success: false,
-            message: "böyle bir entry yok"
+            message: "böyle bir giriniz yok"
           })
         }
       })
@@ -38,7 +39,7 @@ module.exports = {
     Topic.findOne({id: topic_id})
       .then(function (topic) {
         if (topic) {
-          var entry = new Entry({text: text});
+          var entry = new Entry({text: text, user: req.user_mdl._id});
           entry.save()
             .then(function () {
               return Topic.update({id: topic_id}, {$push: {entries: entry._id}})
