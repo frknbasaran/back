@@ -48,7 +48,7 @@ module.exports = {
               res.json({
                 success: true,
                 data: {
-                  entry_id: entry.id
+                  id: entry.id
                 }
               })
             })
@@ -57,6 +57,56 @@ module.exports = {
           res.json({
             success: false,
             message: "başlık yok"
+          })
+        }
+      })
+      .then(null, $error(res));
+  },
+  fetch: function (req, res) {
+    var id = req.params.id;
+
+    Entry.findOne({id: id})
+      .populate("user")
+      .then(function (entry) {
+        if (entry) {
+          Topic.findOne({entries: entry._id})
+            .then(function (topic) {
+              if (topic) {
+                res.json({
+                  success: true,
+                  data: {
+                    id: entry.id,
+                    text: entry.text,
+                    upvotes_count: entry.up.length,
+                    downvotes_count: entry.down.length,
+                    created_at: entry.createdAt,
+                    updated_at: entry.updatedAt,
+                    user: {
+                      id: entry.user._id,
+                      username: entry.user.username,
+                      slug: entry.user.slug
+                    },
+                    topic: {
+                      id: topic.id,
+                      title: topic.title,
+                      slug: topic.slug,
+                      created_at: topic.createdAt,
+                      updated_at: topic.updatedAt
+                    }
+                  }
+                });
+              } else {
+                res.json({
+                  success: false,
+                  message: "başlıksız entry mi olur?"
+                })
+              }
+            })
+            .then(null, $error(res));
+        } else {
+          res.json({
+            success: false,
+            message: "böyle bir entry yok"
           })
         }
       })

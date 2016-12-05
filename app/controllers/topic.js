@@ -206,7 +206,7 @@ module.exports = {
 
     Topic.findOne({id: id})
       .then(function (topic) {
-        return Entry.find({_id: topic.entries})
+        return Entry.find({_id: {$in: topic.entries}})
           .sort({createdAt: 1})
           .skip((page - 1) * count)
           .limit(count)
