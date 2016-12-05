@@ -217,5 +217,28 @@ module.exports = {
         }
       })
       .then(null, $error(res));
+  },
+  update: function (req, res) {
+    var id = req.params.id;
+    var text = req.body.text;
+
+    Entry
+      .findOne({id: id, user: req.user_mdl._id})
+      .then(function (entry) {
+        if (entry) {
+          return Entry.update({id: id}, {text: text});
+        } else {
+          res.json({
+            success: false,
+            message: "böyle bir entry yok"
+          });
+        }
+      })
+      .then(function () {
+        res.json({
+          success: true
+        });
+      })
+      .then(null, $error(res));
   }
 };

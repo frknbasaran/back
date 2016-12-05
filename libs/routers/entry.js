@@ -104,4 +104,20 @@ module.exports = function (app) {
    *     }
    */
   app.post("/entry/vote/down", secure, giffMe("body", ["id"]), routers["entry"].downVote);
+  /**
+   * @api {put} /entries/:id Update Entry
+   * @apiName UpdateEntry
+   * @apiGroup Entry
+   * @apiVersion 0.0.1
+   *
+   * @apiParam {String} id id
+   * @apiParam {String} text text
+   *
+   * @apiSuccessExample {json} Success-Response:
+   *     HTTP/1.1 200
+   *     {
+   *       "success": true
+   *     }
+   */
+  app.put("/entries/:id", secure, giffMe("body", ["text"]), routers["entry"].update);
 };
