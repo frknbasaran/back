@@ -21,7 +21,6 @@ var Topic = new mongoose.Schema({
   "slug": {
     type: String,
     default: "",
-    unique: true,
     lowercase: true,
     trim: true
   },
