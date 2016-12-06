@@ -206,6 +206,15 @@ module.exports = {
 
     Topic.findOne({id: id})
       .then(function (topic) {
+        if (!topic) {
+          res.json({
+            success: false,
+            message: "böyle bir başlık yok"
+          });
+
+          return;
+        }
+
         return Entry.find({_id: {$in: topic.entries}})
           .sort({createdAt: 1})
           .skip((page - 1) * count)
