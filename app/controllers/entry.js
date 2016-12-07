@@ -39,7 +39,7 @@ module.exports = {
     Topic.findOne({id: topic_id})
       .then(function (topic) {
         if (topic) {
-          var entry = new Entry({text: text, user: req.user_mdl._id});
+          var entry = new Entry({text: text, user: req.user_mdl._id, topic: topic._id});
           entry.save()
             .then(function () {
               return Topic.update({id: topic_id}, {$push: {entries: entry._id}})

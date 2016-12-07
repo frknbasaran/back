@@ -21,6 +21,7 @@ module.exports = {
     // fat
     topic.save()
       .then(function () {
+        entry.topic = topic._id;
         entry.save()
           .then(function () {
             Topic.update({_id: topic._id}, {$push: {entries: entry}})

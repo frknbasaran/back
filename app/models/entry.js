@@ -4,7 +4,8 @@ var Id = require(__dirname + '/id');
 
 var Entry = new mongoose.Schema({
   id: {type: Number},
-  user: {type: ObjectId, ref: 'User'},
+  user: {type: ObjectId, ref: 'User', required: true},
+  topic: {type: ObjectId, ref: 'Topic', required: true},
   up: [{type: ObjectId}],
   down: [{type: ObjectId}],
   text: {type: String, required: true, trim: true}
