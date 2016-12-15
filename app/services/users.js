@@ -1,6 +1,5 @@
 var User = $("User");
-var Promise = require("Promise");
-
+var Promise = require("promise");
 
 module.exports = {
   getUserWithToken: function (token) {
