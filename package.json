@@ -26,7 +26,8 @@
     "n3xt": "0.0.2",
     "slug": "0.9.1",
     "request": "2.69.0",
-    "ws": "1.1.1"
+    "ws": "1.1.1",
+    "promise": "7.1.1"
   },
   "devDependencies": {
     "apidoc": "^0.13.1"
