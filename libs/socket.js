@@ -45,17 +45,16 @@ module.exports = function (server, next) {
       __closeWithSecurityNeed(ws);
     } else {
       users$.getUserWithToken(token)
-      	.then(function (user){
-	  user.token = token;
-	  ws__data = user;
-	  global.clients[user.slug] = ws;
-	  console.log(user.slug, 'connected!');
-	  __defineEvents(ws, user.slug);
-	})
-	.catch(function () {
-	  __closeWithSecurityNeed(ws);
-	});
-      });
+        .then(function (user) {
+          user.token = token;
+          ws.__data = user;
+          global.clients[user.slug] = ws;
+          console.log(user.slug, 'connected!');
+          __defineEvents(ws, user.slug);
+        })
+        .catch(function () {
+          __closeWithSecurityNeed(ws);
+        });
     }
   });
 

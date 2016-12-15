@@ -3,7 +3,7 @@ var Promise = require("Promise");
 
 
 module.exports = {
-  getUserWithToken: function (token, next) {
+  getUserWithToken: function (token) {
     return new Promise(function (resolve, reject) {
       User.findOne({
         "tokens": token
