@@ -66,5 +66,24 @@ module.exports = {
         })
       })
       .then(null, $error(res));
+  },
+  chat: function (req, res) {
+    var slug = req.params.slug;
+    var chat_slug = [slug, req.user_mdl.slug].sort().join("-");
+    Chat.findOne({slug: chat_slug})
+      .then(function (chat) {
+        if (chat) {
+          res.json({
+            success: true,
+            data: chat.messages
+          });
+        } else {
+          res.json({
+            success: true,
+            data: []
+          })
+        }
+      })
+      .then(null, $error(res));
   }
 };

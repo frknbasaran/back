@@ -63,4 +63,19 @@ module.exports = function (app) {
    *     }
    */
   app.get("/chats", secure, routers["chats"].inbox);
+  /**
+   * @api {Get} /chats/:slug Get Single Chat
+   * @apiHeader {String} token Users unique access-key.
+   * @apiName GetSingleChat
+   * @apiGroup Chat
+   * @apiVersion 0.0.1
+   *
+   * @apiSuccessExample {json} Success-Response:
+   *     HTTP/1.1 200
+   *     {
+   *       "success": true,
+   *       "data": [Message]
+   *     }
+   */
+  app.get("/chats/:slug", secure, routers["chats"].chat);
 };

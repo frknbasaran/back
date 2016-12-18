@@ -53,7 +53,8 @@ module.exports = {
               $push: {
                 messages: new Message({
                   message: message,
-                  user: from_user._id
+                  user: from_user._id,
+                  date: Date.now()
                 })
               }
             })
@@ -64,7 +65,8 @@ module.exports = {
                   $push: {
                     messages: new Message({
                       message: message,
-                      user: from_user._id
+                      user: from_user._id,
+                      date: Date.now()
                     })
                   }
                 }).then(function () {
