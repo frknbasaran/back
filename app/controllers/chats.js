@@ -1,3 +1,4 @@
+var Chat = $('Chat');
 var chats$ = require(__dirname + '/../services/chats');
 
 module.exports = {
@@ -34,5 +35,36 @@ module.exports = {
           success: false
         })
       });
+  },
+  inbox: function (req, res) {
+    var me = req.user_mdl._id;
+
+    Chat.aggregate([{
+        $match: {users: me}
+      }, {
+        "$project": {
+          "length": {"$size": "$messages"},
+          "messages": {"$slice": ["$messages", -1]},
+          "users": 1
+        }
+      },
+        {"$sort": {"updatedAt": -1}},
+        {"$limit": 10}
+      ])
+      .exec()
+      .then(function (chats) {
+        return Chat.populate(chats, {
+          path: 'users',
+          match: {_id: {$ne: me}},
+          select: 'username slug -_id'
+        });
+      })
+      .then(function (chats) {
+        res.json({
+          success: true,
+          data: chats
+        })
+      })
+      .then(null, $error(res));
   }
 };

@@ -1,6 +1,7 @@
 module.exports = function (app) {
   /**
    * @api {delete} /entries/:id Remove Entry With Id
+   * @apiHeader {String} token Users unique access-key.
    * @apiName RemoveEntry
    * @apiGroup Entry
    * @apiVersion 0.0.1
@@ -14,6 +15,7 @@ module.exports = function (app) {
   app.delete("/entries/:id", secure, routers["entry"].remove);
   /**
    * @api {post} /entries Create Entry
+   * @apiHeader {String} token Users unique access-key.
    * @apiName CreateEntry
    * @apiGroup Entry
    * @apiVersion 0.0.1
@@ -68,6 +70,7 @@ module.exports = function (app) {
   app.get("/entries/:id", routers["entry"].fetch);
   /**
    * @api {post} /entry/vote/up Give Up Vote For Entry
+   * @apiHeader {String} token Users unique access-key.
    * @apiName UpVoteEntry
    * @apiGroup Entry
    * @apiVersion 0.0.1
@@ -87,6 +90,7 @@ module.exports = function (app) {
   app.post("/entry/vote/up", secure, giffMe("body", ["id"]), routers["entry"].upVote);
   /**
    * @api {post} /entry/vote/down Give Down Vote For Entry
+   * @apiHeader {String} token Users unique access-key.
    * @apiName DownVoteEntry
    * @apiGroup Entry
    * @apiVersion 0.0.1
@@ -106,6 +110,7 @@ module.exports = function (app) {
   app.post("/entry/vote/down", secure, giffMe("body", ["id"]), routers["entry"].downVote);
   /**
    * @api {put} /entries/:id Update Entry
+   * @apiHeader {String} token Users unique access-key.
    * @apiName UpdateEntry
    * @apiGroup Entry
    * @apiVersion 0.0.1

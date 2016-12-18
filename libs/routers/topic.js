@@ -1,6 +1,7 @@
 module.exports = function (app) {
   /**
    * @api {post} /topics Create Topic
+   * @apiHeader {String} token Users unique access-key.
    * @apiName CreateTopic
    * @apiGroup Topic
    * @apiVersion 0.0.1

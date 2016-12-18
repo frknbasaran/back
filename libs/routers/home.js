@@ -30,6 +30,7 @@ module.exports = function (app) {
   app.get("/status", routers["home"].status);
   /**
    * @api {get} /online Online
+   * @apiHeader {String} token Users unique access-key.
    * @apiName online
    * @apiGroup Home
    * @apiVersion 0.0.1
@@ -43,5 +44,5 @@ module.exports = function (app) {
    *       }
    *     }
    */
-  app.get("/online", routers["home"].online);
+  app.get("/online", admin, routers["home"].online);
 };

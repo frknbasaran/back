@@ -1,6 +1,7 @@
 module.exports = function (app) {
   /**
    * @api {Post} /chats Create Chat
+   * @apiHeader {String} token Users unique access-key.
    * @apiName Create
    * @apiGroup Chat
    * @apiVersion 0.0.1
@@ -26,6 +27,7 @@ module.exports = function (app) {
   app.post("/chats", giffMe("body", ["users"]), secure, routers["chats"].create);
   /**
    * @api {Post} /chats/send Send Message
+   * @apiHeader {String} token Users unique access-key.
    * @apiName Send
    * @apiGroup Chat
    * @apiVersion 0.0.1
@@ -46,4 +48,19 @@ module.exports = function (app) {
    *     }
    */
   app.post("/chats/send", giffMe("body", ["to", "message"]), secure, routers["chats"].send);
+  /**
+   * @api {Get} /chats Inbox
+   * @apiHeader {String} token Users unique access-key.
+   * @apiName Inbox
+   * @apiGroup Chat
+   * @apiVersion 0.0.1
+   *
+   * @apiSuccessExample {json} Success-Response:
+   *     HTTP/1.1 200
+   *     {
+   *       "success": true,
+   *       "data": [Chat]
+   *     }
+   */
+  app.get("/chats", secure, routers["chats"].inbox);
 };
