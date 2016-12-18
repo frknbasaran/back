@@ -10,4 +10,6 @@ var Message = new mongoose.Schema({
   timestamps: true
 });
 
+Message.index({message: 'text'});
+
 mongoose.model("Message", Message);

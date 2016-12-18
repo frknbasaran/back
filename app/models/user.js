@@ -55,19 +55,7 @@ var User = new mongoose.Schema({
   "entries": [{
     type: ObjectId
   }],
-  "chats": [{
-    type: ObjectId,
-    ref: "Chat"
-  }],
   "favorites": [{
-    type: ObjectId,
-    ref: "User"
-  }],
-  "followers": [{
-    type: ObjectId,
-    ref: "User"
-  }],
-  "blocked": [{
     type: ObjectId,
     ref: "User"
   }],
@@ -86,5 +74,7 @@ User.pre('save', function (next) {
   this.tokens.push(randomToken.generate(32));
   next();
 });
+
+User.index({username: 'text'});
 
 mongoose.model("User", User);
