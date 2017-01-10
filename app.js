@@ -11,7 +11,9 @@ global.$out = require(__dirname + "/libs/out");
 
 require(__dirname + "/libs/db")(function () {
   require(__dirname + "/libs/err")();
-  require(__dirname + "/libs/express")(function () {
-    $logger.info("[APP]", "ready", (new Date().getTime() - $uptime) / 1000);
+  require(__dirname + "/libs/setup")(function () {
+    require(__dirname + "/libs/express")(function () {
+      $logger.info("[APP]", "ready", (new Date().getTime() - $uptime) / 1000);
+    });
   });
 });
