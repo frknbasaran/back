@@ -30,7 +30,7 @@ module.exports = function (app) {
    *       }
    *     }
    */
-  app.post("/entries", secure, giffMe("body", ["topic_id", "text"]), routers["entry"].create);
+  app.post("/entries", giffMe("body", ["topic_id", "text"]), secure, time(), routers["entry"].create);
   /**
    * @api {get} /entries/:id Get Entry
    * @apiName GetEntry
@@ -84,7 +84,7 @@ module.exports = function (app) {
    *       }
    *     }
    */
-  app.post("/entry/vote/up", secure, giffMe("body", ["id"]), routers["entry"].upVote);
+  app.post("/entry/vote/up", giffMe("body", ["id"]), secure, routers["entry"].upVote);
   /**
    * @api {post} /entry/vote/down Give Down Vote For Entry
    * @apiName DownVoteEntry
@@ -103,7 +103,7 @@ module.exports = function (app) {
    *       }
    *     }
    */
-  app.post("/entry/vote/down", secure, giffMe("body", ["id"]), routers["entry"].downVote);
+  app.post("/entry/vote/down", giffMe("body", ["id"]), secure, routers["entry"].downVote);
   /**
    * @api {put} /entries/:id Update Entry
    * @apiName UpdateEntry
@@ -119,5 +119,5 @@ module.exports = function (app) {
    *       "success": true
    *     }
    */
-  app.put("/entries/:id", secure, giffMe("body", ["text"]), routers["entry"].update);
+  app.put("/entries/:id", giffMe("body", ["text"]), secure, routers["entry"].update);
 };

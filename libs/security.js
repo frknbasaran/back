@@ -1,9 +1,49 @@
+global.$access = {};
+
+var time = function (time) {
+  var must = (time ? time : 5) * 60 * 1000;
+  return function (req, res, next) {
+    if (req.user_mdl) {
+      var username = req.user_mdl;
+      if (!$access.hasOwnProperty(username)) {
+        $access[username] = {};
+      }
+
+      var accessOfUser = $access[username];
+
+      if (accessOfUser.hasOwnProperty(req.path)) {
+        var lastAccess = accessOfUser[req.path];
+        var now = new Date().getTime();
+        var diff = now - lastAccess;
+
+        if (diff > must) {
+          accessOfUser[req.path] = now;
+          next();
+        } else {
+          res.json({
+            success: false,
+            message: "Daha " + Math.ceil(diff / 1000) + "sn beklemen lazım :("
+          })
+        }
+      } else {
+        accessOfUser[req.path] = new Date().getTime();
+        next();
+      }
+    } else {
+      res.status(401).json({
+        success: false,
+        message: "+18 burası"
+      });
+    }
+  };
+};
+
 var noSecure = function (req, res, next) {
   var token = req.headers.token || $config.jokerToken;
 
   $("User").findOne({
-      tokens: token
-    })
+    tokens: token
+  })
     .exec()
     .then(function (user) {
       if (!user) {
@@ -24,8 +64,8 @@ var secure = function (req, res, next) {
   var token = req.headers.token || $config.jokerToken;
 
   $("User").findOne({
-      tokens: token
-    })
+    tokens: token
+  })
     .exec()
     .then(function (user) {
       if (!user) {
@@ -82,3 +122,4 @@ global.secure = secure;
 global.noSecure = noSecure;
 global.admin = admin;
 global.moderator = moderator;
+global.time = time;

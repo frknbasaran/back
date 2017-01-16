@@ -17,7 +17,7 @@ module.exports = function (app) {
    *       "entry_id": ""
    *     }
    */
-  app.post("/topics", giffMe("body", ["entry", "topic"]), secure, routers["topic"].create);
+  app.post("/topics", giffMe("body", ["entry", "topic"]), secure, time(), routers["topic"].create);
   /**
    * @api {post} /topics?count=:count&timestamp:timestamp Get Topics
    * @apiName GetTopics
