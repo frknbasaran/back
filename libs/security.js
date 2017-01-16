@@ -22,7 +22,7 @@ var time = function (time) {
         } else {
           res.json({
             success: false,
-            message: "Daha " + Math.ceil(diff / 1000) + "sn beklemen lazım :("
+            message: "Daha " + Math.ceil((must - diff) / 1000) + "sn beklemen lazım :("
           })
         }
       } else {

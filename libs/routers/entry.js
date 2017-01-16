@@ -32,7 +32,7 @@ module.exports = function (app) {
    *       }
    *     }
    */
-  app.post("/entries", giffMe("body", ["topic_id", "text"]), secure, time(), routers["entry"].create);
+  app.post("/entries", giffMe("body", ["topic_id", "text"]), secure, time(2), routers["entry"].create);
   /**
    * @api {get} /entries/:id Get Entry
    * @apiName GetEntry
