@@ -1,8 +1,18 @@
+var _ = require('lodash');
+
 module.exports = {
   index: function (req, res) {
     res.json({
       success: true
     });
+  },
+  online: function (req, res) {
+    res.json({
+      success: true,
+      data: {
+        online: _.map(global.clients || [], "__data.username")
+      }
+    })
   },
   status: function (req, res) {
     res.json({

@@ -51,4 +51,6 @@ Topic.pre('save', function (next) {
     }).bind(this));
 });
 
+Topic.index({title: 'text'});
+
 mongoose.model("Topic", Topic);

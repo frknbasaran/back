@@ -26,4 +26,6 @@ Entry.pre('save', function (next) {
     }).bind(this));
 });
 
+Entry.index({text: 'text'});
+
 mongoose.model("Entry", Entry);

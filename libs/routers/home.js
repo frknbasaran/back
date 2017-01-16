@@ -28,4 +28,21 @@ module.exports = function (app) {
    *     }
    */
   app.get("/status", routers["home"].status);
+  /**
+   * @api {get} /online Online
+   * @apiHeader {String} token Users unique access-key.
+   * @apiName online
+   * @apiGroup Home
+   * @apiVersion 0.0.1
+   *
+   * @apiSuccessExample {json} Success-Response:
+   *     HTTP/1.1 200
+   *     {
+   *       "success": true,
+   *       "data": {
+   *         "online": []
+   *       }
+   *     }
+   */
+  app.get("/online", admin, routers["home"].online);
 };

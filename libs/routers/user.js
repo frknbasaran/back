@@ -29,4 +29,22 @@ module.exports = function (app) {
    *     }
    */
   app.get("/users/profile/:slug", routers["user"].getProfileWithSlug);
+  /**
+   * @api {get} /users/:slug Get User With Slug
+   * @apiName GetUser
+   * @apiGroup User
+   * @apiVersion 0.0.1
+   *
+   * @apiParam {String} slug slug
+   *
+   * @apiSuccessExample {json} Success-Response:
+   *     HTTP/1.1 200
+   *     {
+   *       "success": true,
+   *       "data": {
+   *         "username": ""
+   *       }
+   *     }
+   */
+  app.get("/users/:slug", routers["user"].getUserWithSlug)
 };

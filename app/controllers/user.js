@@ -99,5 +99,25 @@ module.exports = {
           data: data
         });
       }]);
+  },
+  getUserWithSlug: function (req, res) {
+    User.findOne({slug: req.params.slug})
+      .select('username')
+      .then(function (user) {
+        if (user) {
+          res.json({
+            success: true,
+            data: {
+              username: user.username
+            }
+          })
+        } else {
+          res.json({
+            success: false,
+            message: "böyle bi yazar yok"
+          })
+        }
+      })
+      .then(null, $error(res));
   }
 };

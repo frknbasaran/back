@@ -55,24 +55,16 @@ var User = new mongoose.Schema({
   "entries": [{
     type: ObjectId
   }],
-  "chats": [{
-    type: ObjectId,
-    ref: "Chat"
-  }],
   "favorites": [{
-    type: ObjectId,
-    ref: "User"
-  }],
-  "followers": [{
-    type: ObjectId,
-    ref: "User"
-  }],
-  "blocked": [{
     type: ObjectId,
     ref: "User"
   }],
   settings: {
     messaging: {type: Boolean, default: true}
+  },
+  generation: {
+    type: String,
+    trim: true
   }
 }, {
   collection: "users",
@@ -82,9 +74,14 @@ var User = new mongoose.Schema({
 });
 
 User.pre('save', function (next) {
-  this.slug = slug(this.username);
-  this.tokens.push(randomToken.generate(32));
-  next();
+  $generation.get((function (current) {
+    this.generation = current;
+    this.slug = slug(this.username);
+    this.tokens.push(randomToken.generate(32));
+    next();
+  }).bind(this));
 });
+
+User.index({username: 'text'});
 
 mongoose.model("User", User);

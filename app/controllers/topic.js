@@ -144,17 +144,13 @@ module.exports = {
   },
   random: function (req, res) {
     var limit = $config.randomCount;
+    var boom = false;
 
     var results = [];
 
     var randomTask = function (next) {
       Topic.random(function (err, topic) {
-        if (err || !topic) {
-          res.json({
-            success: false,
-            message: err.message
-          });
-        } else {
+        if (topic) {
           var entries = topic.entries;
           var id = entries[Math.floor(Math.random() * entries.length)];
           Entry.findOne({_id: id})
@@ -182,6 +178,15 @@ module.exports = {
               });
             })
             .then(null, $error(res));
+        } else {
+          if (!boom) {
+            res.json({
+              success: false,
+              message: "sözlük bomboş :("
+            });
+          }
+
+          boom = true;
         }
       });
     };

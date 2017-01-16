@@ -1,4 +1,5 @@
 var users$ = require(__dirname + '/../app/services/users');
+var chats$ = require(__dirname + '/../app/services/chats');
 
 var wss = new require("ws").Server;
 
@@ -12,7 +13,9 @@ module.exports = function (server, next) {
   };
 
   var __send = function (slug, data) {
-    global.clients[slug].send(JSON.stringify(data));
+    if (global.clients.hasOwnProperty(slug)) {
+      global.clients[slug].send(JSON.stringify(data));
+    }
   };
 
   var __defineEvents = function (ws, slug) {
@@ -22,13 +25,17 @@ module.exports = function (server, next) {
 
       if (req.action === 'send_message') {
         var data = req.data;
-        var token = global.clients[slug].__data.token;
-        __send(slug, {
-          action: req.action,
+        var user = global.clients[slug].__data;
+        __send(data.to, {
+          action: 'receive_message',
           data: {
-            message: '[' + data.to + '] ' + data.message
+            from: user.username,
+            message: data.message
           }
         });
+
+        // db
+        chats$.sendMessage(user, data.to, data.message);
       }
     });
 

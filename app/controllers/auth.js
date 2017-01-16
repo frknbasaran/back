@@ -1,5 +1,6 @@
 var sha512 = require("js-sha512").sha512;
 var User = $("User");
+var slug = require('slug');
 
 module.exports = {
   login: function (req, res) {
@@ -7,7 +8,11 @@ module.exports = {
     var info = req.body;
 
     User.findOne({
-      email: info.email,
+      $or: [{
+        "username": info.email
+      }, {
+        "email": info.email
+      }],
       password: sha512(info.password)
     }).exec()
       .then(function (user) {
@@ -38,6 +43,8 @@ module.exports = {
         "username": info.username
       }, {
         "email": info.email
+      }, {
+        "slug": slug(info.username)
       }]
     }).exec()
       .then(function (user) {
