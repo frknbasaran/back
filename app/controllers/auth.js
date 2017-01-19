@@ -1,6 +1,7 @@
 var sha512 = require("js-sha512").sha512;
 var User = $("User");
 var slug = require('slug');
+var reserved = require(__dirname + "/../../libs/reserved");
 
 module.exports = {
   login: function (req, res) {
@@ -37,6 +38,14 @@ module.exports = {
   register: function (req, res) {
     var cache = {};
     var info = req.body;
+
+    if (reserved.indexOf(info.username.trim()) > -1) {
+      res.json({
+        "success": false,
+        "message": "önemini kanıtlaman lazım"
+      });
+      return;
+    }
 
     User.findOne({
       $or: [{
@@ -104,10 +113,10 @@ module.exports = {
     user.tokens.splice(index, 1);
 
     user.save().then(function () {
-        res.json({
-          "success": true
-        });
-      })
+      res.json({
+        "success": true
+      });
+    })
       .then(null, $error(res));
   }
 };
