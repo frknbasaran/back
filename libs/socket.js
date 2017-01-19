@@ -40,7 +40,7 @@ module.exports = function (server, next) {
     });
 
     ws.on("close", function () {
-      console.log(slug, 'connection lost');
+      $logger.info(slug, 'connection lost');
       delete global.clients[slug];
     });
   };
@@ -56,7 +56,7 @@ module.exports = function (server, next) {
           user.token = token;
           ws.__data = user;
           global.clients[user.slug] = ws;
-          console.log(user.slug, 'connected!');
+          $logger.info(user.slug, 'connected!');
           __defineEvents(ws, user.slug);
         })
         .catch(function () {
