@@ -31,11 +31,13 @@ module.exports = {
       "[REQ]",
       Object.keys(req.body).length ? colors.inverse(JSON.stringify(req.body)) : "[EMPTY]", !!req.headers.token ? req.headers.token : "[NO TOKEN]"
     );
+    /*
     var send = res.send;
     res.send = function (string) {
       $logger.info("[RES]", string);
       send.call(this, string);
     };
+    */
     next();
   },
   "expressUp": function (port, next) {
