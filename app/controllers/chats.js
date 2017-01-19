@@ -45,6 +45,7 @@ module.exports = {
         "$project": {
           "length": {"$size": "$messages"},
           "messages": {"$slice": ["$messages", -1]},
+          "updatedAt": 1,
           "users": 1
         }
       },

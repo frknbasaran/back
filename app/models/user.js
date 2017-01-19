@@ -52,13 +52,6 @@ var User = new mongoose.Schema({
     }
   },
   "tokens": [String],
-  "entries": [{
-    type: ObjectId
-  }],
-  "favorites": [{
-    type: ObjectId,
-    ref: "User"
-  }],
   settings: {
     messaging: {type: Boolean, default: true}
   },
