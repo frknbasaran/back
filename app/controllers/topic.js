@@ -1,7 +1,7 @@
 var Topic = $("Topic");
 var Entry = $("Entry");
 var _ = require("lodash");
-var n3xt = require("n3xt");
+var async = require("async");
 
 module.exports = {
   create: function (req, res) {
@@ -70,7 +70,7 @@ module.exports = {
         .count({"createdAt": {"$gte": start, "$lt": end}})
         .then((function (entry_count) {
           this.entry_count = entry_count;
-          next();
+          next(null);
         }).bind(this))
         .then(null, $error(res));
     };
@@ -80,7 +80,7 @@ module.exports = {
         .count({"createdAt": {"$gte": start, "$lt": end}})
         .then((function (topic_count) {
           this.topic_count = topic_count;
-          next();
+          next(null);
         }).bind(this))
         .then(null, $error(res));
     };
@@ -89,7 +89,7 @@ module.exports = {
       Entry
         .find({"createdAt": {"$gte": start, "$lt": timestamp}})
         .then(function (entries) {
-          next(entries);
+          next(null, entries);
         })
         .then(null, $error(res));
     };
@@ -121,16 +121,16 @@ module.exports = {
             });
           });
 
-          next();
+          next(null);
         })
         .then(null, $error(res));
     };
 
-    n3xt([
-      getTodayEntryCount,
-      getTodayTopicCount,
-      getTodayEntriesTask,
-      getTopicsTask,
+    async.waterfall([
+        getTodayEntryCount,
+        getTodayTopicCount,
+        getTodayEntriesTask,
+        getTopicsTask],
       function () {
         res.json({
           success: true,
@@ -140,7 +140,7 @@ module.exports = {
             topics_count: this.topic_count ? this.topic_count : "no"
           }
         })
-      }]);
+      });
   },
   random: function (req, res) {
     var limit = $config.randomCount;

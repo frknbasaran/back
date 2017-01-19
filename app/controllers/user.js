@@ -2,7 +2,7 @@ var Topic = $("Topic");
 var Entry = $("Entry");
 var User = $("User");
 var _ = require("lodash");
-var n3xt = require("n3xt");
+var async = require("async");
 
 module.exports = {
   getProfileWithSlug: function (req, res) {
@@ -13,7 +13,7 @@ module.exports = {
         .then((function (user) {
           if (user) {
             this.user = user;
-            next();
+            next(null);
           } else {
             res.json({
               success: false,
@@ -30,7 +30,7 @@ module.exports = {
         .limit(10)
         .populate('topic')
         .then(function (entries) {
-          next({
+          next(null, {
             last_entries: _.map(entries, function (entry) {
               return {
                 id: entry.id,
@@ -43,16 +43,16 @@ module.exports = {
 
     var mostLikedTask = function (data, next) {
       Entry.aggregate([{
-          $match: {
-            user: this.user._id
-          }
-        }, {
-          "$project": {
-            "id": 1,
-            "topic": 1,
-            "length": {"$size": "$up"}
-          }
-        }, {"$sort": {"length": -1}}, {"$limit": 5}])
+        $match: {
+          user: this.user._id
+        }
+      }, {
+        "$project": {
+          "id": 1,
+          "topic": 1,
+          "length": {"$size": "$up"}
+        }
+      }, {"$sort": {"length": -1}}, {"$limit": 5}])
         .exec()
         .then(function (entries) {
           return Entry.populate(entries, {path: 'topic'});
@@ -67,7 +67,7 @@ module.exports = {
                 title: entry.topic.title
               };
             });
-          next(data);
+          next(null, data);
         })
         .then(null, $error(res));
     };
@@ -84,21 +84,21 @@ module.exports = {
               title: entry.topic.title
             };
           });
-          next(data);
+          next(null, data);
         }).then(null, $error(res));
     };
 
-    n3xt([userTask,
-      lastEntriesTask,
-      mostLikedTask,
-      likedTask,
-      function (data) {
+    async.waterfall([userTask,
+        lastEntriesTask,
+        mostLikedTask,
+        likedTask],
+      function (err, data) {
         data.username = this.user.username;
         res.json({
           success: true,
           data: data
         });
-      }]);
+      });
   },
   getUserWithSlug: function (req, res) {
     User.findOne({slug: req.params.slug})
