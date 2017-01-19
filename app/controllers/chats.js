@@ -40,18 +40,18 @@ module.exports = {
     var me = req.user_mdl._id;
 
     Chat.aggregate([{
-        $match: {users: me}
-      }, {
-        "$project": {
-          "length": {"$size": "$messages"},
-          "messages": {"$slice": ["$messages", -1]},
-          "updatedAt": 1,
-          "users": 1
-        }
-      },
-        {"$sort": {"updatedAt": -1}},
-        {"$limit": 10}
-      ])
+      $match: {users: me}
+    }, {
+      "$project": {
+        "length": {"$size": "$messages"},
+        "messages": {"$slice": ["$messages", -1]},
+        "updatedAt": 1,
+        "users": 1
+      }
+    },
+      {"$sort": {"updatedAt": -1}},
+      {"$limit": 10}
+    ])
       .exec()
       .then(function (chats) {
         return Chat.populate(chats, {
@@ -70,6 +70,16 @@ module.exports = {
   },
   chat: function (req, res) {
     var slug = req.params.slug;
+
+    if (slug === req.user_mdl.slug) {
+      res.json({
+        success: false,
+        message: "partenogenez?"
+      });
+
+      return;
+    }
+
     var chat_slug = [slug, req.user_mdl.slug].sort().join("-");
     Chat.findOne({slug: chat_slug})
       .then(function (chat) {
