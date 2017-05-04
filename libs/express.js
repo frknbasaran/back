@@ -30,6 +30,6 @@ module.exports = function (next) {
   app.use(express.static(__dirname + "/../docs"));
   app.use(routers["home"].default);
   socket(server, function () {
-    server.listen(port, utils.expressUp(port, next));
+    server.listen(6060, utils.expressUp(6060, next));
   });
 };
