@@ -1,5 +1,5 @@
 module.exports = {
-  port: 8081,
+  port: 6060,
   errorMail: $package.author.split("<")[1].split(">")[0],
   jokerToken: "BLYAD",
   requestTimeout: 5 * 1000,
